@@ -1,5 +1,6 @@
 {
     "name": "shirase/yii2-sortable",
+    "type": "yii2-extension",
     "require": {
         "php": ">=5.4.0"
     },
