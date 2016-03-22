@@ -49,7 +49,7 @@ class TreeBehavior extends Behavior {
         $this->owner->refresh();
     }
 
-    public function posAfter($id) {
+    public function insertAfter($id) {
         if(!$this->pos) {
             throw new HttpException(500);
         }
@@ -74,7 +74,7 @@ class TreeBehavior extends Behavior {
         $this->owner->save(false, array($this->pos));
     }
 
-    public function posBefore($id) {
+    public function insertBefore($id) {
         if(!$this->pos) {
             throw new HttpException(500);
         }
