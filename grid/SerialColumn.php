@@ -25,7 +25,9 @@ class SerialColumn extends \yii\grid\SerialColumn {
         $modelClass = $this->grid->dataProvider->query->modelClass;
 
         if(($model = new $modelClass()) && $model->hasMethod('insertBefore')) {
-            if(($params = Yii::$app->request->get('SortableSerialColumn')) && $params['id']===$this->grid->id) {
+            $this->grid->dataProvider->getSort()->defaultOrder = array('pos'=>SORT_ASC);
+
+            if(($params = Yii::$app->request->post('SortableSerialColumn')) && $params['id']===$this->grid->id) {
                 while(ob_get_level()) ob_end_clean();
 
                 $insert = isset($params['insert']) ? $params['insert'] : null;
@@ -47,10 +49,7 @@ class SerialColumn extends \yii\grid\SerialColumn {
                     $action = 'insert'.ucfirst($params['action']);
                 }
 
-                $model = $modelClass::find($params['model']);
-                if(!$model->hasMethod($action)) {
-                    throw new HttpException(500);
-                }
+                $model = $modelClass::findOne($params['model']);
                 $model->$action($insert);
 
                 Yii::$app->end();

@@ -11,5 +11,5 @@ class SerialColumnAsset extends AssetBundle {
     public $depends = [
         'yii\jui\JuiAsset',
     ];
-    public $publishOptions = ['forceCopy'=>true];
+    //public $publishOptions = ['forceCopy'=>true];
 } 

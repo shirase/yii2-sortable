@@ -16,7 +16,7 @@
                 drop: function(event, ui) {
                     el.sortable('cancel');
                     var page = parseInt($(this).html());
-                    $.ajax(settings.sorturl, {
+                    $.ajax(settings.url, {
                         cache:false,
                         type:'post',
                         data:{SortableSerialColumn:{id:settings.id, model:ui.item.find('[data-sortable-serial-column-id]').data('sortable-serial-column-id'), page:page}},
