@@ -75,6 +75,10 @@ class TreeBehavior extends Behavior {
     }
 
     public function posBefore($id) {
+        if(!$this->pos) {
+            throw new HttpException(500);
+        }
+
         $target = $this->owner->findOne($id);
 
         if($this->pid && $target->{$this->pid} != $this->owner->{$this->pid}) $this->moveTo($target->{$this->pid});
@@ -96,6 +100,10 @@ class TreeBehavior extends Behavior {
     }
 
     public function deleteRecursive() {
+        if(!$this->pid) {
+            throw new HttpException(500);
+        }
+
         if($rows = $this->owner->findAll([$this->pid=>$this->owner->{$this->owner->primaryKey}])) {
             foreach($rows as $row) {
                 if(!$row->deleteRecursive()) return false;
@@ -107,6 +115,10 @@ class TreeBehavior extends Behavior {
 
     private $_modelpath = array();
     public function getModelByLevel($level) {
+        if(!$this->pid) {
+            throw new HttpException(500);
+        }
+
         if($this->_modelpath) return $this->_modelpath[$level];
 
         $model = $this->owner;
@@ -120,16 +132,25 @@ class TreeBehavior extends Behavior {
     }
 
     public function getParent() {
+        if(!$this->pid) {
+            throw new HttpException(500);
+        }
         $model = $this->owner;
         return $model->findOne($model->{$this->pid});
     }
 
     public function getPrev() {
+        if(!$this->pos) {
+            throw new HttpException(500);
+        }
         $model = $this->owner;
         return $model->find()->where(['<', $this->pos, $model->{$this->pos}])->orderBy($this->pos.' DESC')->one();
     }
 
     public function getNext() {
+        if(!$this->pos) {
+            throw new HttpException(500);
+        }
         $model = $this->owner;
         return $model->find()->where(['>', $this->pos, $model->{$this->pos}])->orderBy($this->pos.' ASC')->one();
     }
