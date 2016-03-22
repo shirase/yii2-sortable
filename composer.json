@@ -1,0 +1,6 @@
+{
+    "name": "shirase/yii2-sortable",
+    "require": {
+        "php": ">=5.4.0",
+    }
+}
