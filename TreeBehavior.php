@@ -3,6 +3,7 @@ namespace shirase\sortable;
 
 use yii\base\Behavior;
 use yii\web\HttpException;
+use yii\db\Expression;
 
 /**
  * Class TreeBehavior
@@ -61,10 +62,10 @@ class TreeBehavior extends Behavior {
         $pos = $target->{$this->pos};
         if($this->owner->findOne([$this->pos=>$pos+1])) {
             if($pos<$this->owner->{$this->pos}) {
-                $this->owner->updateAll(array($this->pos=>new CDbExpression('`'.$this->pos.'`+1')), $this->pos.'>:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$pos, 'pos2'=>$this->owner->{$this->pos}]);
+                $this->owner->updateAll(array($this->pos=>new Expression('`'.$this->pos.'`+1')), $this->pos.'>:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$pos, 'pos2'=>$this->owner->{$this->pos}]);
                 $this->owner->{$this->pos} = $pos+1;
             } else {
-                $this->owner->updateAll(array($this->pos=>new CDbExpression('`'.$this->pos.'`-1')), $this->pos.'>:pos1 AND '.$this->pos.'<=:pos2', ['pos1'=>$this->owner->{$this->pos}, 'pos2'=>$pos]);
+                $this->owner->updateAll(array($this->pos=>new Expression('`'.$this->pos.'`-1')), $this->pos.'>:pos1 AND '.$this->pos.'<=:pos2', ['pos1'=>$this->owner->{$this->pos}, 'pos2'=>$pos]);
                 $this->owner->{$this->pos} = $pos;
             }
         } else {
@@ -86,10 +87,10 @@ class TreeBehavior extends Behavior {
         $pos = $target->{$this->pos};
         if($this->owner->find([$this->pos=>$pos-1]) || $pos<=1) {
             if($pos<$this->owner->{$this->pos}) {
-                $this->owner->updateAll(array($this->pos=>new CDbExpression('`'.$this->pos.'`+1')), $this->pos.'>=:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$pos, 'pos2'=>$this->owner->{$this->pos}]);
+                $this->owner->updateAll(array($this->pos=>new Expression('`'.$this->pos.'`+1')), $this->pos.'>=:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$pos, 'pos2'=>$this->owner->{$this->pos}]);
                 $this->owner->{$this->pos} = $pos;
             } else {
-                $this->owner->updateAll(array($this->pos=>new CDbExpression('`'.$this->pos.'`-1')), $this->pos.'>:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$this->owner->{$this->pos}, 'pos2'=>$pos]);
+                $this->owner->updateAll(array($this->pos=>new Expression('`'.$this->pos.'`-1')), $this->pos.'>:pos1 AND '.$this->pos.'<:pos2', ['pos1'=>$this->owner->{$this->pos}, 'pos2'=>$pos]);
                 $this->owner->{$this->pos} = $pos-1;
             }
         } else {
