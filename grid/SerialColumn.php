@@ -11,7 +11,7 @@ use yii\web\HttpException;
  * Class SerialColumn
  * @package shirase\sortable\grid
  */
-class SerialColumn extends \yii\grid\SerialColumn {
+class SerialColumn extends \kartik\grid\SerialColumn {
 
     public $sortOptions = null;
 

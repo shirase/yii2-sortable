@@ -2,7 +2,9 @@
     "name": "shirase/yii2-sortable",
     "type": "yii2-extension",
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "kartik-v/yii2-mpdf": "*",
+        "kartik-v/yii2-grid": "*"
     },
     "autoload": {
         "psr-4": {
