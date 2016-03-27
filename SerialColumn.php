@@ -1,6 +1,6 @@
 <?php
 
-namespace shirase\sortable\grid;
+namespace shirase\grid\sortable;
 
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
@@ -9,7 +9,7 @@ use yii\web\HttpException;
 
 /**
  * Class SerialColumn
- * @package shirase\sortable\grid
+ * @package shirase\grid\sortable
  */
 class SerialColumn extends \kartik\grid\SerialColumn {
 
