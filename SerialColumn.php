@@ -16,7 +16,7 @@ class SerialColumn extends \kartik\grid\SerialColumn {
     public $sortOptions = null;
     public $sortLinkOptions = [];
 
-    protected $attribute = 'pos';
+    public $attribute = 'pos';
 
     public function init()
     {
