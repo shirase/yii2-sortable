@@ -14,6 +14,9 @@ use yii\web\HttpException;
 class SerialColumn extends \kartik\grid\SerialColumn {
 
     public $sortOptions = null;
+    public $sortLinkOptions = [];
+
+    protected $attribute = 'pos';
 
     public function init()
     {
@@ -25,7 +28,28 @@ class SerialColumn extends \kartik\grid\SerialColumn {
         $modelClass = $this->grid->dataProvider->query->modelClass;
 
         if(($model = new $modelClass()) && $model->hasMethod('insertBefore')) {
-            $this->grid->dataProvider->getSort()->defaultOrder = array('pos'=>SORT_ASC);
+            $sort = $this->grid->dataProvider->getSort();
+            if(!$sort) return;
+
+            if(!$sort->defaultOrder) {
+                $sort->defaultOrder = array($this->attribute=>SORT_ASC);
+            }
+
+            if(!isset($sort->attributes[$this->attribute])) {
+                $sort->attributes[$this->attribute] = [
+                    'label'=>'#',
+                    'asc'=>$this->attribute.' ASC',
+                    'desc'=>$this->attribute.' DESC',
+                ];
+            } else {
+                $sort->attributes[$this->attribute]['label'] = '#';
+            }
+
+            if ($orders = $this->grid->dataProvider->getSort()->orders) {
+                if (array_keys($orders)[0] !== $this->attribute) {
+                    return;
+                }
+            }
 
             if(($params = Yii::$app->request->post('SortableSerialColumn')) && $params['id']===$this->grid->id) {
                 while(ob_get_level()) ob_end_clean();
@@ -47,6 +71,13 @@ class SerialColumn extends \kartik\grid\SerialColumn {
                     $insert = $models[0]->primaryKey;
                 } else {
                     $action = 'insert'.ucfirst($params['action']);
+                    if ($orders[$this->attribute]===SORT_DESC) {
+                        if ($action === 'insertBefore') {
+                            $action = 'insertAfter';
+                        } else {
+                            $action = 'insertBefore';
+                        }
+                    }
                 }
 
                 $model = $modelClass::findOne($params['model']);
@@ -70,6 +101,24 @@ class SerialColumn extends \kartik\grid\SerialColumn {
 
             $id = $this->grid->options['id'];
             $view->registerJs("jQuery('#$id').GridView_sortable(".Json::encode($options).");");
+        }
+    }
+
+    protected function renderHeaderCellContent()
+    {
+        $provider = $this->grid->dataProvider;
+        if (($sort = $provider->getSort()) !== false && $sort->hasAttribute($this->attribute)) {
+            /*if ($orders = $sort->orders) {
+                if (array_keys($orders)[0] === $this->attribute) {
+                    $this->sortLinkOptions = array_merge($this->sortLinkOptions, ['style'=>'color:red']);
+                }
+            }*/
+
+            $this->sortLinkOptions = array_merge($this->sortLinkOptions, ['data-pjax'=>'0']);
+
+            return $sort->link($this->attribute, $this->sortLinkOptions);
+        } else {
+            return parent::renderHeaderCellContent();
         }
     }
 }
