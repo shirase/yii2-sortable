@@ -4,8 +4,7 @@
     "require": {
         "php": ">=5.4.0",
         "kartik-v/yii2-mpdf": "*",
-        "kartik-v/yii2-grid": "*",
-        "shirase/yii2-tree-behavior": "*"
+        "kartik-v/yii2-grid": "*"
     },
     "autoload": {
         "psr-4": {
