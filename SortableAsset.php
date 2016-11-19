@@ -4,9 +4,9 @@ namespace shirase\grid\sortable;
 
 use yii\web\AssetBundle;
 
-class SerialColumnAsset extends AssetBundle {
+class SortableAsset extends AssetBundle {
 
-    public $js = ['js/grid-sortable.js'];
+    public $js = ['js/sortable-items.js'];
     public $depends = [
         'yii\jui\JuiAsset',
     ];
