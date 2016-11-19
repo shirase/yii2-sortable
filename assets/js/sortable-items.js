@@ -2,7 +2,7 @@
     $.fn.sortableItems = function(options) {
 
         var settings = {
-            id:null,
+            id:'',
             url:null,
             items:null,
             paginationSelector: '.pagination li:not(.active):not(.previous):not(.next) a',
@@ -21,9 +21,9 @@
                     $.ajax(settings.url, {
                         cache:false,
                         type:'post',
-                        data:{Sortable:{id:settings.id, model:ui.item.find('[data-sortable-serial-column-id]').data('sortable-serial-column-id'), page:page}},
+                        data:{Sortable:{id:settings.id, model:ui.item.find('[data-sortable-id]').data('sortable-id'), page:page}},
                         complete: function(data) {
-                            //el.yiiGridView('applyFilter');
+
                         }
                     });
                 }
@@ -32,7 +32,7 @@
             el.sortable({
                 items:settings.items,
                 connectWith:el.find(settings.connectWithSelector),
-                handle: '[data-sortable-serial-column-id]',
+                handle: '[data-sortable-id]',
                 stop: function(event, ui) {
                     var insert = ui.item.prev();
                     var action = 'after';
@@ -47,7 +47,7 @@
                             type:'post',
                             data:{Sortable:{id:settings.id, model:ui.item.find('[data-sortable-id]').data('sortable-id'), insert:id, action:action}},
                             complete: function(data) {
-                                //if(el.yiiGridView) el.yiiGridView('applyFilter');
+
                             }
                         });
                     }

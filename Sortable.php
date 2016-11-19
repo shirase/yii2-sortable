@@ -22,6 +22,8 @@ class Sortable extends Widget
      */
     public $dataProvider;
 
+    public $containerSelector;
+
     public function init()
     {
         if (!$this->dataProvider) {
@@ -57,7 +59,7 @@ class Sortable extends Widget
                 }
             }
 
-            if(($params = \Yii::$app->request->post('SortableSerialColumn')) && $params['id']===$this->id) {
+            if(($params = \Yii::$app->request->post('Sortable')) && $params['id']===$this->id) {
                 while(ob_get_level()) ob_end_clean();
 
                 $insert = isset($params['insert']) ? $params['insert'] : null;
@@ -92,10 +94,6 @@ class Sortable extends Widget
                 \Yii::$app->end();
             }
 
-            $this->contentOptions = function ($model, $key, $index, $column) {
-                return ['data-sortable-serial-column-id'=>$key];
-            };
-
             $view = $this->getView();
 
             SortableAsset::register($view);
@@ -105,12 +103,18 @@ class Sortable extends Widget
                 $options = array_merge($options, $this->sortOptions);
             }
 
-            $id = $this->options['id'];
-            $view->registerJs("jQuery('#$id').sortableItems(".Json::encode($options).");");
+            $selector = $this->containerSelector ? $this->containerSelector : '#'.$this->id;
+            $view->registerJs("jQuery('{$selector}').sortableItems(".Json::encode($options).");");
+
+            if (!$this->containerSelector) {
+                ob_start();
+            }
         }
     }
 
     public function run() {
-
+        if (!$this->containerSelector) {
+            echo Html::tag('div', ob_get_clean(), ['id' => $this->id]);
+        }
     }
 }

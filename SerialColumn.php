@@ -22,11 +22,11 @@ class SerialColumn extends \kartik\grid\SerialColumn {
     {
         parent::init();
 
-        Sortable::widget(['attribute'=>$this->attribute, 'sortOptions'=>$this->sortOptions, 'sortItemsSelector'=>'table tr']);
-
         $this->contentOptions = function ($model, $key, $index, $column) {
             return ['data-sortable-id'=>$key];
         };
+
+        Sortable::widget(['containerSelector'=>$this->grid->id, 'attribute'=>$this->attribute, 'sortOptions'=>$this->sortOptions, 'sortItemsSelector'=>'table tr']);
     }
 
     protected function renderHeaderCellContent()
