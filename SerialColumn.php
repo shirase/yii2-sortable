@@ -26,7 +26,7 @@ class SerialColumn extends \kartik\grid\SerialColumn {
             return ['data-sortable-id'=>$key];
         };
 
-        Sortable::widget(['containerSelector'=>$this->grid->id, 'attribute'=>$this->attribute, 'sortOptions'=>$this->sortOptions, 'sortItemsSelector'=>'table tr']);
+        Sortable::widget(['dataProvider'=>$this->grid->dataProvider, 'containerSelector'=>'#'.$this->grid->id, 'attribute'=>$this->attribute, 'sortOptions'=>$this->sortOptions, 'sortItemsSelector'=>'table tr']);
     }
 
     protected function renderHeaderCellContent()
