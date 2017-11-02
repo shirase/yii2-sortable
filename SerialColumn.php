@@ -11,7 +11,9 @@ use yii\web\HttpException;
  * Class SerialColumn
  * @package shirase\grid\sortable
  */
-class SerialColumn extends \kartik\grid\SerialColumn {
+class SerialColumn extends \kartik\grid\SerialColumn
+{
+    public $header;
 
     public $sortOptions = null;
     public $sortLinkOptions = [];
@@ -41,7 +43,11 @@ class SerialColumn extends \kartik\grid\SerialColumn {
 
             $this->sortLinkOptions = array_merge($this->sortLinkOptions, ['data-pjax'=>'0']);
 
-            return $sort->link($this->attribute, $this->sortLinkOptions);
+            if ($this->header) {
+                return $this->header;
+            } else {
+                return $sort->link($this->attribute, $this->sortLinkOptions);
+            }
         } else {
             return parent::renderHeaderCellContent();
         }
