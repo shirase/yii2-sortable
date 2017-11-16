@@ -2,6 +2,7 @@
 
 namespace shirase\grid\sortable;
 
+use yii\base\Exception;
 use yii\base\Widget;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
@@ -68,6 +69,8 @@ class Sortable extends Widget
                     throw new HttpException(500);
                 }
 
+                $model = $modelClass::findOne($params['model']);
+
                 if(isset($params['page'])) {
                     $this->dataProvider->getPagination()->page = $params['page'] - 1;
                     $models = $this->dataProvider->getModels();
@@ -75,8 +78,15 @@ class Sortable extends Widget
                         throw new HttpException(500);
                     }
 
-                    $action = 'insertBefore';
-                    $insert = $models[0]->primaryKey;
+                    reset($models);
+                    $insertOn = current($models);
+                    $insert = $insertOn->primaryKey;
+
+                    if ($model->{$this->attribute} > $insertOn->{$this->attribute}) {
+                        $action = 'insertBefore';
+                    } else {
+                        $action = 'insertAfter';
+                    }
                 } else {
                     $action = 'insert'.ucfirst($params['action']);
                     if ($orders[$this->attribute]===SORT_DESC) {
@@ -88,7 +98,9 @@ class Sortable extends Widget
                     }
                 }
 
-                $model = $modelClass::findOne($params['model']);
+                if ($action && $action != 'insertBefore' && $action != 'insertAfter')
+                    throw new Exception('Unknown action ' . $action);
+
                 $model->$action($insert);
 
                 \Yii::$app->end();
